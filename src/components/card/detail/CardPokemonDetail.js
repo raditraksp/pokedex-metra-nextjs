@@ -1,5 +1,6 @@
 // react import
 import React, { useEffect, useState } from "react";
+import { useRouter } from "next/router";
 
 import { fetchSpecies, fetchStats } from "@/libs/helper/fetchAPI";
 import { Card, Typography, Tag, Space, Tabs, Divider, Progress } from "antd";
@@ -10,8 +11,6 @@ import {
   CapitalizeFirstLetter,
   CapitalizeAfterSpace,
 } from "@/libs/helper/globalFunc";
-
-import { useRouter } from "next/router";
 
 import axios from "axios";
 import { CardPokemon } from "../dashboard/CardPokemon";
@@ -225,7 +224,7 @@ export const CardPokemonDetail = () => {
         loading={isLoading}
         // hoverable
         style={{
-          width: "75%",
+          width: "100%",
           display: "flex",
           justifyContent: "center",
           flexDirection: "column",
@@ -235,8 +234,7 @@ export const CardPokemonDetail = () => {
         cover={
           <img
             style={{
-              width: "300px",
-              width: "300px",
+              maxWidth: "300px",
               marginLeft: "auto",
               marginRight: "auto",
             }}
