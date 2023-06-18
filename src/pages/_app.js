@@ -1,6 +1,10 @@
 // import react
 import React from "react";
 
+// import react-query
+import { QueryClient, QueryClientProvider } from "react-query";
+const queryClient = new QueryClient();
+
 // import component
 import CollapsedBreadcrumbs from "@/components/Breadcumb";
 
@@ -52,15 +56,17 @@ const App = ({ Component, pageProps }) => {
           </Typography>
         </div>
       </Header>
-      <Content
-        className="site-layout"
-        style={{
-          padding: "0 50px",
-        }}
-      >
-        <CollapsedBreadcrumbs />
-        <Component {...pageProps} />
-      </Content>
+      <QueryClientProvider client={queryClient}>
+        <Content
+          className="site-layout"
+          style={{
+            padding: "0 50px",
+          }}
+        >
+          <CollapsedBreadcrumbs />
+          <Component {...pageProps} />
+        </Content>
+      </QueryClientProvider>
       <Footer
         style={{
           textAlign: "center",

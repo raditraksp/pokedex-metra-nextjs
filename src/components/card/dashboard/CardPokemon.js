@@ -1,7 +1,5 @@
 // react import
-import { Col } from "antd";
-import Card from "antd/es/card/Card";
-import Meta from "antd/es/card/Meta";
+import { Col, Card } from "antd";
 import React from "react";
 
 export const CardPokemon = ({ key, data }) => {
@@ -18,7 +16,7 @@ export const CardPokemon = ({ key, data }) => {
           />
         }
       >
-        <Meta title={data.name} description="www.instagram.com" />
+        <Card.Meta title={data.name} description="www.instagram.com" />
       </Card>
     </Col>
   );
