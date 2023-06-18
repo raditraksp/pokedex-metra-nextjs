@@ -27,6 +27,7 @@ const Favorite = () => {
           <CardPokemon
             pokemonName={pokemon?.name}
             toggleReload={toggleReload}
+            buttonAddFavorite={true}
           />
         ))
       ) : (

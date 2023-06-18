@@ -114,6 +114,7 @@ const Dashboard = () => {
             (isFiltered ? page?.data?.pokemon : page?.data?.results)?.map(
               (pokemon) => (
                 <CardPokemon
+                  key={pokemon?.id}
                   pokemonName={pokemon?.name}
                   isFilter={isFiltered}
                   buttonAddFavorite={true}

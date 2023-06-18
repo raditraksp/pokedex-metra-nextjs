@@ -35,6 +35,7 @@ const formatStats = (data) => {
 };
 
 export const CardPokemon = ({
+  key,
   pokemonName,
   buttonAddFavorite,
   toggleReload,
@@ -95,7 +96,7 @@ export const CardPokemon = ({
   };
 
   return (
-    <Col key={stats?.id}>
+    <Col key={key}>
       <Link href={`/pokemon-detail/${stats?.name}`}>
         <Card
           loading={isLoading}
@@ -116,7 +117,7 @@ export const CardPokemon = ({
             {stats?.types?.map((type, i) => {
               return (
                 type && (
-                  <Tag key={i} color={CheckColorPokemonType(type, true)}>
+                  <Tag key={type + i} color={CheckColorPokemonType(type, true)}>
                     {CapitalizeFirstLetter(type)}
                   </Tag>
                 )
@@ -125,52 +126,56 @@ export const CardPokemon = ({
           </Space>
         </Card>
       </Link>
-      {buttonAddFavorite && !CheckFavorite() ? (
-        <div
-          style={{
-            marginTop: "10px",
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-          }}
-        >
-          <Button
-            onClick={AddtoFavorite}
+      {buttonAddFavorite ? (
+        !CheckFavorite() ? (
+          <div
             style={{
+              marginTop: "10px",
               display: "flex",
               justifyContent: "center",
               alignItems: "center",
             }}
-            disabled={CheckFavorite()}
-            icon={<PlusCircleFilled style={{ fontSize: "18px" }} />}
           >
-            Add to Favorite
-          </Button>
-        </div>
+            <Button
+              onClick={AddtoFavorite}
+              style={{
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+              disabled={CheckFavorite()}
+              icon={<PlusCircleFilled style={{ fontSize: "18px" }} />}
+            >
+              Add to Favorite
+            </Button>
+          </div>
+        ) : (
+          <div
+            style={{
+              marginTop: "10px",
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+          >
+            <Button
+              onClick={() => {
+                DeleteFavorite(stats?.id);
+              }}
+              style={{
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+              danger
+              icon={<DeleteFilled style={{ fontSize: "18px" }} />}
+            >
+              Delete
+            </Button>
+          </div>
+        )
       ) : (
-        <div
-          style={{
-            marginTop: "10px",
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-          }}
-        >
-          <Button
-            onClick={() => {
-              DeleteFavorite(stats?.id);
-            }}
-            style={{
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
-            }}
-            danger
-            icon={<DeleteFilled style={{ fontSize: "18px" }} />}
-          >
-            Delete
-          </Button>
-        </div>
+        ""
       )}
     </Col>
   );

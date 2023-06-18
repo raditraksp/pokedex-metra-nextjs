@@ -69,7 +69,7 @@ export const CardPokemonDetail = () => {
     Promise.all(allAbilitiesData)
       .then((res) => setAbilities(res))
       .catch((err) => {
-        console.log(err);
+        // console.log(err);
       });
     return () => {};
   }, [stats]);
@@ -129,7 +129,7 @@ export const CardPokemonDetail = () => {
         <>
           {stats?.stats &&
             stats?.stats?.map((stat, i) => (
-              <>
+              <div key={i}>
                 <div style={{ fontWeight: 500 }}>
                   {CapitalizeAfterSpace(stat?.stat?.name?.replaceAll("-", " "))}
                 </div>
@@ -141,7 +141,7 @@ export const CardPokemonDetail = () => {
                   />
                   <label style={{ marginLeft: 5 }}>{stat?.base_stat}</label>
                 </div>
-              </>
+              </div>
             ))}
         </>
       ),
@@ -161,25 +161,34 @@ export const CardPokemonDetail = () => {
           <Typography.Title level={4}>Evolution Tree</Typography.Title>
           {evolutions
             ? evolutions?.chain?.evolves_to?.map((evolves, i) => (
-                <div>
+                <div key={evolutions?.chain?.species?.name + i}>
                   <CardPokemon pokemonName={evolutions?.chain?.species?.name} />
                   <div style={{ marginTop: "10px" }}>
                     <CardPokemon pokemonName={evolves?.species?.name} />
                   </div>
                   {evolves?.evolves_to?.length !== 0
                     ? evolves.evolves_to?.map((evolves2, i) => (
-                        <div style={{ marginTop: "10px" }}>
+                        <div
+                          key={evolves2?.species?.name + i}
+                          style={{ marginTop: "10px" }}
+                        >
                           <CardPokemon pokemonName={evolves2?.species?.name} />
                           {evolves2?.evolves_to?.length !== 0
                             ? evolves2.evolves_to?.map((evolves3, i) => (
-                                <div style={{ marginTop: "10px" }}>
+                                <div
+                                  key={evolves3?.species?.name + i}
+                                  style={{ marginTop: "10px" }}
+                                >
                                   <CardPokemon
                                     pokemonName={evolves3?.species?.name}
                                   />
                                   {evolves3?.evolves_to?.length !== 0
                                     ? evolves3.evolves_to?.map(
                                         (evolves4, i) => (
-                                          <div style={{ marginTop: "10px" }}>
+                                          <div
+                                            key={evolves4?.species?.name + i}
+                                            style={{ marginTop: "10px" }}
+                                          >
                                             <CardPokemon
                                               pokemonName={
                                                 evolves4?.species?.name
