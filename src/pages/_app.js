@@ -10,6 +10,7 @@ import CollapsedBreadcrumbs from "@/components/Breadcumb";
 
 // import UI
 import { Layout, Menu, Typography } from "antd";
+import Link from "next/link";
 const { Header, Content, Footer } = Layout;
 
 const App = ({ Component, pageProps }) => {
@@ -26,36 +27,42 @@ const App = ({ Component, pageProps }) => {
           justifyContent: "space-between",
         }}
       >
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-          }}
-        >
-          <img src="/images/logo/poke-logo.png" height={"30px"} />
-        </div>
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-          }}
-        >
-          <img src="/images/logo/poke-ball.png" height={"40px"} />
-        </div>
-        <div>
-          <Typography.Title
-            level={3}
+        <Link href="/">
+          <div
             style={{
-              color: "wheat",
-              fontFamily: "fantasy",
-              fontWeight: "bold",
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
             }}
           >
-            Poke-Dex
-          </Typography.Title>
-        </div>
+            <img src="/images/logo/poke-logo.png" height={"30px"} />
+          </div>
+        </Link>
+        <Link href="/">
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+          >
+            <img src="/images/logo/poke-ball.png" height={"40px"} />
+          </div>
+        </Link>
+        <Link href="/">
+          <div>
+            <Typography.Title
+              level={3}
+              style={{
+                color: "wheat",
+                fontFamily: "fantasy",
+                fontWeight: "bold",
+              }}
+            >
+              Poke-Dex
+            </Typography.Title>
+          </div>
+        </Link>
       </Header>
       <QueryClientProvider client={queryClient}>
         <Content

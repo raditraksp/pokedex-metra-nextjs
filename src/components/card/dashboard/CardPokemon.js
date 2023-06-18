@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from "react";
 
 import { fetchStats } from "@/libs/helper/fetchAPI";
-import { Col, Card, Typography, Tag, Space } from "antd";
+import { Col, Card, Typography, Tag, Space, Button } from "antd";
 
 import { useQuery } from "react-query";
 import {
@@ -10,6 +10,12 @@ import {
   CapitalizeFirstLetter,
 } from "@/libs/helper/globalFunc";
 import Link from "next/link";
+import {
+  HeartFilled,
+  HeartOutlined,
+  HeartTwoTone,
+  PlusCircleFilled,
+} from "@ant-design/icons";
 
 const formatStats = (data) => {
   return {
@@ -24,7 +30,7 @@ const formatStats = (data) => {
   };
 };
 
-export const CardPokemon = ({ pokemonName }) => {
+export const CardPokemon = ({ pokemonName, buttonFavorite }) => {
   const [stats, setStats] = useState(null);
   console.log("pokemonName", pokemonName);
   const { data, isLoading, isError } = useQuery(
@@ -69,6 +75,25 @@ export const CardPokemon = ({ pokemonName }) => {
           </Space>
         </Card>
       </Link>
+      <div
+        style={{
+          marginTop: "10px",
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+      >
+        <Button
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+          icon={<PlusCircleFilled style={{ fontSize: "25px" }} />}
+        >
+          Add to Favorite
+        </Button>
+      </div>
     </Col>
   );
 };

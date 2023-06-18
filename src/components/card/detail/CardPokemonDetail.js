@@ -76,7 +76,6 @@ export const CardPokemonDetail = () => {
 
   useEffect(() => {
     if (data2?.data?.evolution_chain?.url) {
-      console.log(data2);
       FetchEvolutions(data2?.data?.evolution_chain?.url);
     }
     return () => {};
@@ -127,7 +126,7 @@ export const CardPokemonDetail = () => {
       key: "2",
       label: `Stats`,
       children: (
-        <div>
+        <>
           {stats?.stats &&
             stats?.stats?.map((stat, i) => (
               <>
@@ -144,7 +143,7 @@ export const CardPokemonDetail = () => {
                 </div>
               </>
             ))}
-        </div>
+        </>
       ),
     },
     {
