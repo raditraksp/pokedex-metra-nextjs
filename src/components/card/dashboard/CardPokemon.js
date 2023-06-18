@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from "react";
 
 import { fetchStats } from "@/libs/helper/fetchAPI";
-import { Col, Card } from "antd";
+import { Col, Card, Typography, Tag, Space } from "antd";
 
 import { useQuery } from "react-query";
 import {
@@ -41,7 +41,7 @@ export const CardPokemon = ({ key, pokemon }) => {
   console.log("stats: ", stats);
 
   return (
-    <Col key={key}>
+    <Col key={stats?.id}>
       <Card
         loading={isLoading}
         hoverable
@@ -52,15 +52,28 @@ export const CardPokemon = ({ key, pokemon }) => {
         cover={
           <img
             // height={100}
-            alt={data?.name}
+            alt={stats?.name}
             src={stats?.spriteUrl}
           />
         }
       >
-        <Card.Meta
-          title={capitalizeFirstLetter(stats?.name)}
-          description="www.instagram.com"
-        />
+        <Typography.Title level={5} type="secondary">
+          #{stats?.id}
+        </Typography.Title>
+        <Typography.Title level={5}>
+          {capitalizeFirstLetter(stats?.name)}
+        </Typography.Title>
+        <Space size={[0, 8]} wrap>
+          {stats?.types?.map((type, i) => {
+            return (
+              type && (
+                <Tag key={i} color={CheckColorPokemonType(type, true)}>
+                  {capitalizeFirstLetter(type)}
+                </Tag>
+              )
+            );
+          })}
+        </Space>
       </Card>
     </Col>
   );
