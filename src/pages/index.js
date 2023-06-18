@@ -93,7 +93,7 @@ const Dashboard = () => {
             (isFiltered ? page?.data?.pokemon : page?.data?.results)?.map(
               (pokemon) => (
                 <CardPokemon
-                  pokemon={pokemon}
+                  pokemonName={pokemon?.name}
                   isLoading={isLoading}
                   isFilter={isFiltered}
                 />

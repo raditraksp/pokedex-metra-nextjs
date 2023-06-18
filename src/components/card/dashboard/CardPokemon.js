@@ -24,13 +24,13 @@ const formatStats = (data) => {
   };
 };
 
-export const CardPokemon = ({ pokemon, isFiltered }) => {
+export const CardPokemon = ({ pokemonName }) => {
   const [stats, setStats] = useState(null);
+  console.log("pokemonName", pokemonName);
   const { data, isLoading, isError } = useQuery(
-    ["pokemon-stats", isFiltered ? pokemon?.pokemon?.name : pokemon?.name],
+    ["pokemon-stats", pokemonName],
     fetchStats
   );
-  console.log(pokemon?.pokemon?.name);
   useEffect(() => {
     if (data) {
       setStats(formatStats(data?.data));
