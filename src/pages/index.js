@@ -8,23 +8,17 @@ import { useInfiniteQuery, useQuery } from "react-query";
 import { fetchPkmns } from "@/libs/helper/fetchAPI";
 
 const Dashboard = () => {
-  const [PokemonList, setPokemonList] = useState([
-    { id: 1, name: "Pokemon Api" },
-    { id: 1, name: "Pokemon Air" },
-    { id: 1, name: "Pokemon Air" },
-    { id: 1, name: "Pokemon Air" },
-    { id: 1, name: "Pokemon Air" },
-  ]);
-
-  const { isLoading, isError, data, error } = useQuery("todos", fetchPkmns);
-  console.log("data", data);
+  const { isLoading, isError, data, error } = useQuery("pokemons", fetchPkmns);
 
   return (
     <div>
-      <Row gutter={20}>
-        {PokemonList &&
-          PokemonList.map((pokemon, i) => (
-            <CardPokemon key={i} data={pokemon} />
+      <Row
+        gutter={[20, 20]}
+        style={{ display: "flex", justifyContent: "center" }}
+      >
+        {data?.data &&
+          data?.data?.results.map((pokemon, i) => (
+            <CardPokemon key={i} pokemon={pokemon} isLoading={isLoading} />
           ))}
       </Row>
     </div>
