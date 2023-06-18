@@ -3,12 +3,25 @@ import React, { useEffect, useRef, useState } from "react";
 
 //  components import
 import { CardPokemon } from "@/components/card/dashboard/CardPokemon";
-import { Row } from "antd";
+import { Button, Divider, Row } from "antd";
 import { useInfiniteQuery, useQuery } from "react-query";
 import { fetchPokemons } from "@/libs/helper/fetchAPI";
+import DrawerFilterPokemonType from "@/components/filter/DrawerFilterPokemonType";
+import { FilterFilled } from "@ant-design/icons";
 
 const Dashboard = () => {
-  // const { isLoading, isError, data, error } = useQuery("pokemons", fetchPokemons);
+  const [open, setOpen] = useState(false);
+  const showDrawer = () => {
+    setOpen(true);
+  };
+  const onClose = () => {
+    setOpen(false);
+  };
+
+  const onSubmit = (values) => {
+    onClose();
+    console.log("Success:", values);
+  };
 
   const {
     data,
@@ -51,11 +64,18 @@ const Dashboard = () => {
   }, [hasNextPage, isFetchingNextPage, fetchNextPage]);
 
   console.log("data", data);
-  // console.log("asd", hasNextPage);
-  // console.log("pages[0].data.results[0]", data?.pages?.[0]?.data?.results[0]);
 
   return (
-    <div>
+    <div style={{ textAlign: "center" }}>
+      <Button type="primary" onClick={showDrawer} icon={<FilterFilled />}>
+        Filter
+      </Button>
+      <Divider />
+      <DrawerFilterPokemonType
+        onClose={onClose}
+        open={open}
+        onSubmit={onSubmit}
+      />
       <Row
         gutter={[20, 20]}
         style={{ display: "flex", justifyContent: "center" }}

@@ -43,12 +43,11 @@ export const CardPokemon = ({ pokemon }) => {
         loading={isLoading}
         hoverable
         style={{
-          width: 200,
+          width: 230,
           backgroundColor: CheckColorPokemonType(stats?.types?.[0]),
         }}
         cover={
           <img
-            // height={100}
             alt={stats?.name}
             src={stats?.spriteUrl}
           />

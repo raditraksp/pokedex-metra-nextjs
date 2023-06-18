@@ -7,9 +7,14 @@ const fetchPokemons = async (params) => {
   return await axios.get(params?.pageParam ?? url);
 };
 
+const fetchPokemonTypes = async (params) => {
+  const url = `https://pokeapi.co/api/v2/type`;
+  return await axios.get(url);
+};
+
 const fetchStats = async (params) => {
   const url = `https://pokeapi.co/api/v2/pokemon/${params?.queryKey?.[1]}`;
   return await axios.get(url);
 };
 
-export { fetchPokemons, fetchStats };
+export { fetchPokemons, fetchStats, fetchPokemonTypes };
