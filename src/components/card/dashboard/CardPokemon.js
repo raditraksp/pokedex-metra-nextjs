@@ -23,7 +23,7 @@ const formatStats = (data) => {
   };
 };
 
-export const CardPokemon = ({ key, pokemon }) => {
+export const CardPokemon = ({ pokemon }) => {
   const [stats, setStats] = useState(null);
   const { data, isLoading, isError } = useQuery(
     ["pokemon-stats", pokemon?.name],
@@ -37,16 +37,13 @@ export const CardPokemon = ({ key, pokemon }) => {
     return () => {};
   }, [data]);
 
-  console.log(data);
-  console.log("stats: ", stats);
-
   return (
     <Col key={stats?.id}>
       <Card
         loading={isLoading}
         hoverable
         style={{
-          width: 240,
+          width: 200,
           backgroundColor: CheckColorPokemonType(stats?.types?.[0]),
         }}
         cover={

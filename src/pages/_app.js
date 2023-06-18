@@ -45,7 +45,8 @@ const App = ({ Component, pageProps }) => {
           <img src="/images/logo/poke-ball.png" height={"40px"} />
         </div>
         <div>
-          <Typography
+          <Typography.Title
+            level={3}
             style={{
               color: "wheat",
               fontFamily: "fantasy",
@@ -53,7 +54,7 @@ const App = ({ Component, pageProps }) => {
             }}
           >
             Poke-Dex
-          </Typography>
+          </Typography.Title>
         </div>
       </Header>
       <QueryClientProvider client={queryClient}>
