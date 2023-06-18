@@ -1,4 +1,7 @@
+import { fetchPokemonTypes } from "@/libs/helper/fetchAPI";
+import { CapitalizeFirstLetter } from "@/libs/helper/globalFunc";
 import { Form, Checkbox, Button, Drawer, Space, Row, Col } from "antd";
+import { useQuery } from "react-query";
 
 const pokemonTypes = [
   { label: "Normal", value: "normal" },
@@ -10,41 +13,34 @@ const pokemonTypes = [
 ];
 
 const DrawerFilterPokemonType = ({ onClose, open, onSubmit }) => {
+  const { data, isLoading, isError } = useQuery(
+    "pokemon-types",
+    fetchPokemonTypes
+  );
+
   return (
     <Drawer
       title="Filter Pokemon Type"
-      width={720}
+      width={"50%"}
       onClose={onClose}
       open={open}
       bodyStyle={{
         paddingBottom: 80,
       }}
     >
-      <Form
-        name="basic"
-        labelCol={{
-          span: 8,
-        }}
-        wrapperCol={{
-          span: 16,
-        }}
-        style={{
-          maxWidth: 600,
-        }}
-        initialValues={{
-          remember: true,
-        }}
-        onFinish={onSubmit}
-      >
+      <Form name="basic" onFinish={onSubmit}>
         <Form.Item name="pokemonTypes">
-          <Checkbox.Group options={pokemonTypes} />
+          <Checkbox.Group
+            options={data?.data?.results?.map((type, i) => {
+              return {
+                id: i,
+                label: CapitalizeFirstLetter(type?.name),
+                value: type?.name,
+              };
+            })}
+          />
         </Form.Item>
-        <Form.Item
-          wrapperCol={{
-            offset: 8,
-            span: 16,
-          }}
-        >
+        <Form.Item>
           <Button type="primary" htmlType="submit">
             Submit
           </Button>

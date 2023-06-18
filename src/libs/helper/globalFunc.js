@@ -1,5 +1,14 @@
-export const capitalizeFirstLetter = (string) => {
-  return string?.charAt?.(0)?.toUpperCase() + string?.slice(1);
+export const CapitalizeFirstLetter = (string) => {
+  return string && string?.charAt?.(0)?.toUpperCase() + string?.slice(1);
+};
+
+export const CapitalizeAfterSpace = (string) => {
+  return (
+    string &&
+    string?.replace(/(^|\s)\S/g, function (match) {
+      return match?.toUpperCase();
+    })
+  );
 };
 
 export const CheckColorPokemonType = (type, isDark) => {

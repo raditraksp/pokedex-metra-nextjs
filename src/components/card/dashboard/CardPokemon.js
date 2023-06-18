@@ -7,13 +7,14 @@ import { Col, Card, Typography, Tag, Space } from "antd";
 import { useQuery } from "react-query";
 import {
   CheckColorPokemonType,
-  capitalizeFirstLetter,
+  CapitalizeFirstLetter,
 } from "@/libs/helper/globalFunc";
+import Link from "next/link";
 
 const formatStats = (data) => {
   return {
     id: data?.id,
-    spriteUrl: data.sprites.other?.["official-artwork"].front_default,
+    spriteUrl: data?.sprites.other?.["official-artwork"]?.front_default,
     name: data?.name,
     pokedex: `${data?.id}`?.padStart(4, "0"),
     types: [
@@ -23,13 +24,13 @@ const formatStats = (data) => {
   };
 };
 
-export const CardPokemon = ({ pokemon }) => {
+export const CardPokemon = ({ pokemon, isFiltered }) => {
   const [stats, setStats] = useState(null);
   const { data, isLoading, isError } = useQuery(
-    ["pokemon-stats", pokemon?.name],
+    ["pokemon-stats", isFiltered ? pokemon?.pokemon?.name : pokemon?.name],
     fetchStats
   );
-
+  console.log(pokemon?.pokemon?.name);
   useEffect(() => {
     if (data) {
       setStats(formatStats(data?.data));
@@ -39,38 +40,35 @@ export const CardPokemon = ({ pokemon }) => {
 
   return (
     <Col key={stats?.id}>
-      <Card
-        loading={isLoading}
-        hoverable
-        style={{
-          width: 230,
-          backgroundColor: CheckColorPokemonType(stats?.types?.[0]),
-        }}
-        cover={
-          <img
-            alt={stats?.name}
-            src={stats?.spriteUrl}
-          />
-        }
-      >
-        <Typography.Title level={5} type="secondary">
-          #{stats?.id}
-        </Typography.Title>
-        <Typography.Title level={5}>
-          {capitalizeFirstLetter(stats?.name)}
-        </Typography.Title>
-        <Space size={[0, 8]} wrap>
-          {stats?.types?.map((type, i) => {
-            return (
-              type && (
-                <Tag key={i} color={CheckColorPokemonType(type, true)}>
-                  {capitalizeFirstLetter(type)}
-                </Tag>
-              )
-            );
-          })}
-        </Space>
-      </Card>
+      <Link href={`/pokemon-detail/${stats?.name}`}>
+        <Card
+          loading={isLoading}
+          hoverable
+          style={{
+            width: 230,
+            backgroundColor: CheckColorPokemonType(stats?.types?.[0]),
+          }}
+          cover={<img alt={stats?.name} src={stats?.spriteUrl} />}
+        >
+          <Typography.Title level={5} type="secondary">
+            #{stats?.id}
+          </Typography.Title>
+          <Typography.Title level={5}>
+            {CapitalizeFirstLetter(stats?.name)}
+          </Typography.Title>
+          <Space size={[0, 8]} wrap>
+            {stats?.types?.map((type, i) => {
+              return (
+                type && (
+                  <Tag key={i} color={CheckColorPokemonType(type, true)}>
+                    {CapitalizeFirstLetter(type)}
+                  </Tag>
+                )
+              );
+            })}
+          </Space>
+        </Card>
+      </Link>
     </Col>
   );
 };

@@ -2,11 +2,10 @@
 import React from "react";
 
 // next router
-import { useRouter } from "next/router";
+import { CardPokemonDetail } from "@/components/card/detail/CardPokemonDetail";
 
-const PokemonDetail = (param) => {
-  const { query } = useRouter();
-  return <div>Pokemon {query?.id}</div>;
+const PokemonDetail = () => {
+  return <CardPokemonDetail />;
 };
 
 export default PokemonDetail;
