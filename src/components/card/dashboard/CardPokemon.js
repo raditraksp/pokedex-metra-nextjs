@@ -11,11 +11,14 @@ import {
 } from "@/libs/helper/globalFunc";
 import Link from "next/link";
 import {
+  DeleteFilled,
   HeartFilled,
   HeartOutlined,
   HeartTwoTone,
   PlusCircleFilled,
 } from "@ant-design/icons";
+
+import _ from "lodash";
 
 const formatStats = (data) => {
   return {
@@ -30,9 +33,14 @@ const formatStats = (data) => {
   };
 };
 
-export const CardPokemon = ({ pokemonName, buttonFavorite }) => {
+export const CardPokemon = ({
+  pokemonName,
+  buttonAddFavorite,
+  buttonDeleteFavorite,
+  toggleReload,
+}) => {
   const [stats, setStats] = useState(null);
-  console.log("pokemonName", pokemonName);
+
   const { data, isLoading, isError } = useQuery(
     ["pokemon-stats", pokemonName],
     fetchStats
@@ -43,6 +51,24 @@ export const CardPokemon = ({ pokemonName, buttonFavorite }) => {
     }
     return () => {};
   }, [data]);
+
+  const AddtoFavorite = () => {
+    let tempArray = localStorage.getItem("pokemon-favorite")
+      ? JSON.parse(localStorage.getItem("pokemon-favorite"))
+      : [];
+    tempArray.push(stats);
+    let uniq = _.uniqBy(tempArray, "id");
+    localStorage.setItem("pokemon-favorite", JSON.stringify(uniq));
+  };
+
+  const DeleteFavorite = (id) => {
+    let tempArray = localStorage.getItem("pokemon-favorite")
+      ? JSON.parse(localStorage.getItem("pokemon-favorite"))
+      : [];
+    let deletedArray = tempArray.filter((item) => item?.id !== id);
+    localStorage.setItem("pokemon-favorite", JSON.stringify(deletedArray));
+    toggleReload && toggleReload();
+  };
 
   return (
     <Col key={stats?.id}>
@@ -75,25 +101,53 @@ export const CardPokemon = ({ pokemonName, buttonFavorite }) => {
           </Space>
         </Card>
       </Link>
-      <div
-        style={{
-          marginTop: "10px",
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-        }}
-      >
-        <Button
+      {buttonAddFavorite && (
+        <div
           style={{
+            marginTop: "10px",
             display: "flex",
             justifyContent: "center",
             alignItems: "center",
           }}
-          icon={<PlusCircleFilled style={{ fontSize: "25px" }} />}
         >
-          Add to Favorite
-        </Button>
-      </div>
+          <Button
+            onClick={AddtoFavorite}
+            style={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+            icon={<PlusCircleFilled style={{ fontSize: "18px" }} />}
+          >
+            Add to Favorite
+          </Button>
+        </div>
+      )}
+      {buttonDeleteFavorite && (
+        <div
+          style={{
+            marginTop: "10px",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
+          <Button
+            onClick={() => {
+              DeleteFavorite(stats?.id);
+            }}
+            style={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+            danger
+            icon={<DeleteFilled style={{ fontSize: "18px" }} />}
+          >
+            Delete
+          </Button>
+        </div>
+      )}
     </Col>
   );
 };

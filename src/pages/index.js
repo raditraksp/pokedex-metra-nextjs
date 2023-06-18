@@ -44,8 +44,6 @@ const Dashboard = () => {
     },
   });
 
-  console.log(hasNextPage);
-
   const bottomBoundaryRef = useRef(null);
 
   useEffect(() => {
@@ -104,8 +102,8 @@ const Dashboard = () => {
               (pokemon) => (
                 <CardPokemon
                   pokemonName={pokemon?.name}
-                  isLoading={isLoading}
                   isFilter={isFiltered}
+                  buttonAddFavorite={true}
                 />
               )
             )

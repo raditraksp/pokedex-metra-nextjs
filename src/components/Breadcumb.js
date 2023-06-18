@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import { Breadcrumb } from "antd";
-import Link from "next/link";
 import { CapitalizeAfterSpace } from "@/libs/helper/globalFunc";
 
 const CollapsedBreadcrumbs = () => {
@@ -13,9 +12,6 @@ const CollapsedBreadcrumbs = () => {
     setPaths(myPaths);
     return () => {};
   }, [router]);
-
-  console.log(paths);
-  console.log(router?.asPath)
 
   return (
     <div

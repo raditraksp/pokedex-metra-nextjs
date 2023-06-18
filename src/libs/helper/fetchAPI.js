@@ -4,7 +4,6 @@ import axios from "axios";
 
 const fetchPokemons = async (params) => {
   //   const url = `https://pokeapi.co/api/v2/pokemon?offset=0&limit=20`;
-  console.log(params);
   return await axios.get(params?.pageParam ?? params?.queryKey?.[1]);
 };
 
