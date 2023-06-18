@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import { Breadcrumb } from "antd";
 import Link from "next/link";
+import { CapitalizeAfterSpace } from "@/libs/helper/globalFunc";
 
 const CollapsedBreadcrumbs = () => {
   const router = useRouter();
@@ -27,7 +28,7 @@ const CollapsedBreadcrumbs = () => {
           paths &&
           paths.map((path, i) => {
             return {
-              title: path === "" ? "Dashboard" : path?.replaceAll("-", " "),
+              title: path === "" ? "Dashboard" : CapitalizeAfterSpace(path?.replaceAll("-", " ")),
             };
           })
         }

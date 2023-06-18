@@ -3,11 +3,12 @@ import React, { useEffect, useRef, useState } from "react";
 
 //  components import
 import { CardPokemon } from "@/components/card/dashboard/CardPokemon";
-import { Button, Divider, Row } from "antd";
+import { Badge, Button, Divider, Row } from "antd";
 import { useInfiniteQuery, useQuery } from "react-query";
 import { fetchPokemons } from "@/libs/helper/fetchAPI";
 import DrawerFilterPokemonType from "@/components/filter/DrawerFilterPokemonType";
-import { FilterFilled } from "@ant-design/icons";
+import { FilterFilled, HeartFilled } from "@ant-design/icons";
+import Link from "next/link";
 
 const Dashboard = () => {
   const [open, setOpen] = useState(false);
@@ -71,13 +72,22 @@ const Dashboard = () => {
     };
   }, [hasNextPage, isFetchingNextPage, fetchNextPage]);
 
-  console.log("data", data);
-
   return (
     <div style={{ textAlign: "center" }}>
       <Button type="primary" onClick={showDrawer} icon={<FilterFilled />}>
         Filter
       </Button>
+      <Link href={"/favorite"}>
+        <Badge count={5}>
+          <Button
+            type="dashed"
+            icon={<HeartFilled style={{ color: "red" }} />}
+            style={{ marginLeft: "30px" }}
+          >
+            Favorite
+          </Button>
+        </Badge>
+      </Link>
       <Divider />
       <DrawerFilterPokemonType
         onClose={onClose}
