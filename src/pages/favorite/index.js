@@ -26,7 +26,6 @@ const Favorite = () => {
         pokemonList?.map((pokemon, i) => (
           <CardPokemon
             pokemonName={pokemon?.name}
-            buttonDeleteFavorite={true}
             toggleReload={toggleReload}
           />
         ))

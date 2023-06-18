@@ -8,6 +8,7 @@ import { useQuery } from "react-query";
 import {
   CheckColorPokemonType,
   CapitalizeFirstLetter,
+  ShowNotificationCustom,
 } from "@/libs/helper/globalFunc";
 import Link from "next/link";
 import {
@@ -36,7 +37,6 @@ const formatStats = (data) => {
 export const CardPokemon = ({
   pokemonName,
   buttonAddFavorite,
-  buttonDeleteFavorite,
   toggleReload,
 }) => {
   const [stats, setStats] = useState(null);
@@ -56,9 +56,19 @@ export const CardPokemon = ({
     let tempArray = localStorage.getItem("pokemon-favorite")
       ? JSON.parse(localStorage.getItem("pokemon-favorite"))
       : [];
+
+    // Check if data already exists
+    const isDataExists = tempArray.some((item) => item.id === stats.id);
+    if (isDataExists) {
+      ShowNotificationCustom("error", "Error", "Pokemon already exists!");
+      return; // Exit the function to prevent further execution
+    }
+
     tempArray.push(stats);
     let uniq = _.uniqBy(tempArray, "id");
     localStorage.setItem("pokemon-favorite", JSON.stringify(uniq));
+    ShowNotificationCustom("success", "Success", "Pokemon added to favorites.");
+    toggleReload && toggleReload();
   };
 
   const DeleteFavorite = (id) => {
@@ -67,7 +77,21 @@ export const CardPokemon = ({
       : [];
     let deletedArray = tempArray.filter((item) => item?.id !== id);
     localStorage.setItem("pokemon-favorite", JSON.stringify(deletedArray));
+    ShowNotificationCustom(
+      "error",
+      "Success",
+      "Pokemon deleted from favorites."
+    );
     toggleReload && toggleReload();
+  };
+
+  const CheckFavorite = () => {
+    let tempArray = localStorage.getItem("pokemon-favorite")
+      ? JSON.parse(localStorage.getItem("pokemon-favorite"))
+      : [];
+    let checkArray =
+      tempArray.filter((item) => item?.id == stats?.id)?.length !== 0;
+    return checkArray;
   };
 
   return (
@@ -101,7 +125,7 @@ export const CardPokemon = ({
           </Space>
         </Card>
       </Link>
-      {buttonAddFavorite && (
+      {buttonAddFavorite && !CheckFavorite() ? (
         <div
           style={{
             marginTop: "10px",
@@ -117,13 +141,13 @@ export const CardPokemon = ({
               justifyContent: "center",
               alignItems: "center",
             }}
+            disabled={CheckFavorite()}
             icon={<PlusCircleFilled style={{ fontSize: "18px" }} />}
           >
             Add to Favorite
           </Button>
         </div>
-      )}
-      {buttonDeleteFavorite && (
+      ) : (
         <div
           style={{
             marginTop: "10px",

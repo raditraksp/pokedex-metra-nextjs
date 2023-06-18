@@ -1,3 +1,5 @@
+import { notification } from "antd";
+
 export const CapitalizeFirstLetter = (string) => {
   return string && string?.charAt?.(0)?.toUpperCase() + string?.slice(1);
 };
@@ -47,3 +49,10 @@ export const CheckColorPokemonType = (type, isDark) => {
       return isDark ? "hsl(64, 10%, 66%)" : "hsl(64, 32%, 89%)";
   }
 };
+
+export function ShowNotificationCustom(status, msg, desc) {
+  notification[status]({
+    // message: msg,
+    description: desc,
+  });
+}

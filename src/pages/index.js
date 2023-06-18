@@ -70,13 +70,26 @@ const Dashboard = () => {
     };
   }, [hasNextPage, isFetchingNextPage, fetchNextPage]);
 
+  const [count, setCount] = useState(null);
+  const [isReload, setIsReload] = useState(false);
+  const toggleReload = () => setIsReload(!isReload);
+
+  useEffect(() => {
+    let length = localStorage?.getItem("pokemon-favorite")
+      ? JSON.parse(localStorage.getItem("pokemon-favorite"))
+      : [];
+    setCount(length?.length ?? 0);
+
+    return () => {};
+  }, [isReload]);
+
   return (
     <div style={{ textAlign: "center" }}>
       <Button type="primary" onClick={showDrawer} icon={<FilterFilled />}>
         Filter
       </Button>
       <Link href={"/favorite"}>
-        <Badge count={5}>
+        <Badge count={count}>
           <Button
             type="dashed"
             icon={<HeartFilled style={{ color: "red" }} />}
@@ -104,6 +117,7 @@ const Dashboard = () => {
                   pokemonName={pokemon?.name}
                   isFilter={isFiltered}
                   buttonAddFavorite={true}
+                  toggleReload={toggleReload}
                 />
               )
             )
