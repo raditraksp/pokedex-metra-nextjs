@@ -20,11 +20,15 @@ const CollapsedBreadcrumbs = () => {
       }}
     >
       <Breadcrumb
+        style={{ fontSize: "18px" }}
         items={
           paths &&
-          paths.map((path, i) => {
+          _.uniq(paths).map((path, i) => {
             return {
-              title: path === "" ? "Dashboard" : CapitalizeAfterSpace(path?.replaceAll("-", " ")),
+              title:
+                path === ""
+                  ? "Dashboard"
+                  : CapitalizeAfterSpace(path?.replaceAll("-", " ")),
             };
           })
         }

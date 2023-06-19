@@ -3,7 +3,16 @@ import React, { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 
 import { fetchSpecies, fetchStats } from "@/libs/helper/fetchAPI";
-import { Card, Typography, Tag, Space, Tabs, Divider, Progress } from "antd";
+import {
+  Card,
+  Typography,
+  Tag,
+  Space,
+  Tabs,
+  Divider,
+  Progress,
+  Button,
+} from "antd";
 
 import { useQuery } from "react-query";
 import {
@@ -14,6 +23,7 @@ import {
 
 import axios from "axios";
 import { CardPokemon } from "../dashboard/CardPokemon";
+import { LeftOutlined } from "@ant-design/icons";
 
 const formatStats = (data) => {
   return {
@@ -31,7 +41,7 @@ const formatStats = (data) => {
 };
 
 export const CardPokemonDetail = () => {
-  const { query } = useRouter();
+  const { query, back } = useRouter();
   const [stats, setStats] = useState(null);
   const [abilities, setAbilities] = useState(null);
   const [evolutions, setEvolutions] = useState(null);
@@ -219,56 +229,59 @@ export const CardPokemonDetail = () => {
   }, [data]);
 
   return (
-    <div style={{ display: "flex", justifyContent: "center" }}>
-      <Card
-        loading={isLoading}
-        // hoverable
-        style={{
-          width: "100%",
-          display: "flex",
-          justifyContent: "center",
-          flexDirection: "column",
-          textAlign: "center",
-          backgroundColor: CheckColorPokemonType(stats?.types?.[0]),
-        }}
-        cover={
-          <img
-            style={{
-              maxWidth: "300px",
-              marginLeft: "auto",
-              marginRight: "auto",
-            }}
-            alt={stats?.name}
-            src={stats?.spriteUrl}
-          />
-        }
-      >
-        <Typography.Title level={5} type="secondary">
-          #{stats?.id}
-        </Typography.Title>
-        <Typography.Title level={5}>
-          {CapitalizeFirstLetter(stats?.name)}
-        </Typography.Title>
-        <Space size={[0, 8]} wrap>
-          {stats?.types?.map((type, i) => {
-            return (
-              type && (
-                <Tag key={i} color={CheckColorPokemonType(type, true)}>
-                  {CapitalizeFirstLetter(type)}
-                </Tag>
-              )
-            );
-          })}
-        </Space>
-        <Card style={{ marginTop: "10px" }}>
-          <Tabs
-            style={{ textAlign: "start" }}
-            defaultActiveKey="1"
-            items={items}
-            onChange={onChange}
-          />
+    <>
+      <Button onClick={back} icon={<LeftOutlined />} />
+      <div style={{ display: "flex", justifyContent: "center" }}>
+        <Card
+          loading={isLoading}
+          // hoverable
+          style={{
+            width: "100%",
+            display: "flex",
+            justifyContent: "center",
+            flexDirection: "column",
+            textAlign: "center",
+            backgroundColor: CheckColorPokemonType(stats?.types?.[0]),
+          }}
+          cover={
+            <img
+              style={{
+                maxWidth: "300px",
+                marginLeft: "auto",
+                marginRight: "auto",
+              }}
+              alt={stats?.name}
+              src={stats?.spriteUrl}
+            />
+          }
+        >
+          <Typography.Title level={5} type="secondary">
+            #{stats?.id}
+          </Typography.Title>
+          <Typography.Title level={5}>
+            {CapitalizeFirstLetter(stats?.name)}
+          </Typography.Title>
+          <Space size={[0, 8]} wrap>
+            {stats?.types?.map((type, i) => {
+              return (
+                type && (
+                  <Tag key={i} color={CheckColorPokemonType(type, true)}>
+                    {CapitalizeFirstLetter(type)}
+                  </Tag>
+                )
+              );
+            })}
+          </Space>
+          <Card style={{ marginTop: "10px" }}>
+            <Tabs
+              style={{ textAlign: "start" }}
+              defaultActiveKey="1"
+              items={items}
+              onChange={onChange}
+            />
+          </Card>
         </Card>
-      </Card>
-    </div>
+      </div>
+    </>
   );
 };
