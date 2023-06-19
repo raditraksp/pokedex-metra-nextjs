@@ -3,30 +3,37 @@ import React, { useEffect, useRef, useState } from "react";
 
 //  components import
 import { CardPokemon } from "@/components/card/dashboard/CardPokemon";
-import { Badge, Button, Divider, Row } from "antd";
+import { Alert, Badge, Button, Col, Divider, Row, Spin } from "antd";
 import { useInfiniteQuery, useQuery } from "react-query";
-import { fetchPokemons } from "@/libs/helper/fetchAPI";
+import {
+  fetchPokemonByType,
+  fetchPokemonTypes,
+  fetchPokemons,
+} from "@/libs/helper/fetchAPI";
 import DrawerFilterPokemonType from "@/components/filter/DrawerFilterPokemonType";
-import { FilterFilled, HeartFilled } from "@ant-design/icons";
+import { FilterFilled, HeartFilled, LoadingOutlined } from "@ant-design/icons";
 import Link from "next/link";
+import {
+  CapitalizeFirstLetter,
+  CheckColorPokemonType,
+} from "@/libs/helper/globalFunc";
+
+const antIcon = (
+  <LoadingOutlined
+    style={{
+      fontSize: 24,
+    }}
+    spin
+  />
+);
 
 const Dashboard = () => {
-  const [open, setOpen] = useState(false);
-  const [isFiltered, setIsFiltered] = useState(false);
-  const [URL, setURL] = useState(
-    "https://pokeapi.co/api/v2/pokemon?offset=0&limit=20"
-  );
-  const showDrawer = () => {
-    setOpen(true);
-  };
-  const onClose = () => {
-    setOpen(false);
-  };
+  const [filteredPokemon, setFilteredPokemon] = useState(null);
+  const [selectedType, setSelectedType] = useState(null);
+  const [loadingFilter, setLoadingFilter] = useState(false);
 
   const onSubmit = (values) => {
     onClose();
-    // setURL("https://pokeapi.co/api/v2/type/water?offset=0&limit=20");
-    // setIsFiltered(true);
     console.log("Success:", values);
   };
 
@@ -37,12 +44,26 @@ const Dashboard = () => {
     fetchNextPage,
     hasNextPage,
     isFetchingNextPage,
-  } = useInfiniteQuery(["pokemons", URL], fetchPokemons, {
+    remove
+  } = useInfiniteQuery("pokemons", fetchPokemons, {
     getNextPageParam: (lastPage, pages) => {
       // Return the next page number or null if there are no more pages
       return lastPage?.data?.next ?? null;
     },
   });
+
+  const {
+    data: data2,
+    isLoading: isLoading2,
+    isError: isError2,
+  } = useQuery("pokemon-types", fetchPokemonTypes);
+
+  const FilterPokemonType = async (pokemonType) => {
+    setLoadingFilter(true);
+    let results = await fetchPokemonByType(pokemonType);
+    setLoadingFilter(false);
+    return setFilteredPokemon(results?.data?.pokemon ?? null);
+  };
 
   const bottomBoundaryRef = useRef(null);
 
@@ -66,6 +87,7 @@ const Dashboard = () => {
     return () => {
       if (bottomBoundaryRef.current) {
         observer.unobserve(bottomBoundaryRef.current);
+        observer.disconnect();
       }
     };
   }, [hasNextPage, isFetchingNextPage, fetchNextPage]);
@@ -83,11 +105,36 @@ const Dashboard = () => {
     return () => {};
   }, [isReload]);
 
+  const resetFilter = () => {
+    setFilteredPokemon(null);
+    setSelectedType(null);
+    remove()
+
+    if (bottomBoundaryRef.current) {
+      // Reconnect the observer to resume the fetch-on-scroll behavior
+      const options = {
+        root: null,
+        rootMargin: "0px",
+        threshold: 1.0,
+      };
+
+      const observer = new IntersectionObserver(([entry]) => {
+        if (
+          entry.isIntersecting &&
+          hasNextPage &&
+          !isFetchingNextPage &&
+          !selectedType
+        ) {
+          fetchNextPage();
+        }
+      }, options);
+
+      observer.observe(bottomBoundaryRef.current);
+    }
+  };
+
   return (
     <div style={{ textAlign: "center" }}>
-      <Button type="primary" onClick={showDrawer} icon={<FilterFilled />}>
-        Filter
-      </Button>
       <Link href={"/favorite"}>
         <Badge count={count}>
           <Button
@@ -99,36 +146,91 @@ const Dashboard = () => {
           </Button>
         </Badge>
       </Link>
+
+      <Row
+        gutter={[10, 10]}
+        style={{
+          width: "50%",
+          display: "flex",
+          justifyContent: "center",
+          marginLeft: "auto",
+          marginRight: "auto",
+          marginTop: "10px",
+        }}
+      >
+        {data2?.data?.results?.map((type, i) => {
+          return (
+            <Col key={i}>
+              <Button
+                onClick={() => {
+                  FilterPokemonType(type?.name);
+                  setSelectedType(type?.name);
+                }}
+                type="primary"
+                style={{
+                  background: CheckColorPokemonType(type?.name, true),
+                  opacity: selectedType === type?.name ? 0.5 : 1,
+                  color: "white",
+                }}
+                disabled={selectedType === type?.name}
+              >
+                {CapitalizeFirstLetter(type?.name)}
+              </Button>
+            </Col>
+          );
+        })}
+        <Col>
+          <Button onClick={resetFilter} danger>
+            {CapitalizeFirstLetter("Show All")}
+          </Button>
+        </Col>
+      </Row>
       <Divider />
-      <DrawerFilterPokemonType
-        onClose={onClose}
-        open={open}
-        onSubmit={onSubmit}
-      />
       <Row
         gutter={[20, 20]}
         style={{ display: "flex", justifyContent: "center" }}
       >
-        {data?.pages &&
+        {loadingFilter || isLoading ? (
+          <Spin indicator={antIcon} />
+        ) : data?.pages && !filteredPokemon ? (
           data?.pages?.map((page) =>
-            (isFiltered ? page?.data?.pokemon : page?.data?.results)?.map(
-              (pokemon) => (
-                <CardPokemon
-                  key={pokemon?.id}
-                  pokemonName={pokemon?.name}
-                  isFilter={isFiltered}
-                  buttonAddFavorite={true}
-                  toggleReload={toggleReload}
-                />
-              )
-            )
-          )}
+            page?.data?.results?.map((pokemon) => (
+              <CardPokemon
+                key={pokemon?.id}
+                pokemonName={pokemon?.name}
+                buttonAddFavorite={true}
+                toggleReload={toggleReload}
+              />
+            ))
+          )
+        ) : filteredPokemon && filteredPokemon?.length === 0 ? (
+          <Alert
+            message="No Pokemon Found"
+            type="error"
+            style={{ marginTop: "30px" }}
+          />
+        ) : (
+          filteredPokemon?.map((pokemon, i) => (
+            <CardPokemon
+              key={i}
+              pokemonName={pokemon?.pokemon?.name}
+              buttonAddFavorite={true}
+              toggleReload={toggleReload}
+            />
+          ))
+        )}
 
-        {isFetchingNextPage && <div>Loading more...</div>}
-        {!isFetchingNextPage && hasNextPage && (
+        {!isFetchingNextPage && hasNextPage ? (
           <div ref={bottomBoundaryRef}></div>
+        ) : (
+          ""
         )}
       </Row>
+      {isFetchingNextPage && !selectedType && (
+        <div style={{ marginTop: "20px" }}>
+          Loading More <Spin indicator={antIcon} />
+        </div>
+      )}
     </div>
   );
 };

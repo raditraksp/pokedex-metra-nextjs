@@ -96,7 +96,7 @@ export const CardPokemon = ({
   };
 
   return (
-    <Col key={key}>
+    <Col key={pokemonName}>
       <Link href={`/pokemon-detail/${stats?.name}`}>
         <Card
           loading={isLoading}

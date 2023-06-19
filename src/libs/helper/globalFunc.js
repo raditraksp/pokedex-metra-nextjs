@@ -42,8 +42,38 @@ export const CheckColorPokemonType = (type, isDark) => {
     case "flying":
       return isDark ? "hsl(23, 100%, 54%)" : "hsl(23, 100%, 84%)";
 
-    case "fighter":
+    case "fighting":
       return isDark ? "hsl(0, 80%, 42%)" : "hsl(0, 100%, 72%)";
+
+    case "ground":
+      return isDark ? "hsl(34, 35%, 40%)" : "hsl(34, 52%, 75%)";
+
+    case "rock":
+      return isDark ? "hsl(40, 26%, 35%)" : "hsl(40, 44%, 70%)";
+
+    case "ghost":
+      return isDark ? "hsl(270, 14%, 20%)" : "hsl(270, 28%, 45%)";
+
+    case "steel":
+      return isDark ? "hsl(210, 10%, 35%)" : "hsl(210, 22%, 65%)";
+
+    case "psychic":
+      return isDark ? "hsl(320, 28%, 30%)" : "hsl(320, 50%, 60%)";
+
+    case "ice":
+      return isDark ? "hsl(195, 33%, 38%)" : "hsl(195, 48%, 70%)";
+
+    case "dragon":
+      return isDark ? "hsl(240, 80%, 30%)" : "hsl(240, 80%, 60%)";
+
+    case "dark":
+      return isDark ? "hsl(0, 0%, 15%)" : "hsl(0, 0%, 40%)";
+
+    case "unknown":
+      return isDark ? "hsl(0, 0%, 40%)" : "hsl(0, 0%, 70%)";
+
+    case "shadow":
+      return isDark ? "hsl(64, 8%, 8%)" : "hsl(0, 0%, 70%)";
 
     default:
       return isDark ? "hsl(64, 10%, 66%)" : "hsl(64, 32%, 89%)";

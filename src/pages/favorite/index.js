@@ -25,6 +25,7 @@ const Favorite = () => {
       {pokemonList && pokemonList?.length !== 0 ? (
         pokemonList?.map((pokemon, i) => (
           <CardPokemon
+            key={pokemon?.name}
             pokemonName={pokemon?.name}
             toggleReload={toggleReload}
             buttonAddFavorite={true}

@@ -3,13 +3,20 @@
 import axios from "axios";
 
 const fetchPokemons = async (params) => {
-  //   const url = `https://pokeapi.co/api/v2/pokemon?offset=0&limit=20`;
-  return await axios.get(params?.pageParam ?? params?.queryKey?.[1]);
+  const url = `https://pokeapi.co/api/v2/pokemon?offset=0&limit=20`;
+  return await axios.get(params?.pageParam ?? url);
 };
 
 const fetchPokemonTypes = async (params) => {
   const url = `https://pokeapi.co/api/v2/type`;
   return await axios.get(url);
+};
+
+const fetchPokemonByType = async (params) => {
+  if (params) {
+    const url = `https://pokeapi.co/api/v2/type/${params}`;
+    return await axios.get(url);
+  }
 };
 
 const fetchStats = async (params) => {
@@ -20,6 +27,7 @@ const fetchStats = async (params) => {
     return;
   }
 };
+
 const fetchSpecies = async (params) => {
   if (params?.queryKey?.[1]) {
     const url = `https://pokeapi.co/api/v2/pokemon-species/${params?.queryKey?.[1]}`;
@@ -41,6 +49,7 @@ export {
   fetchPokemons,
   fetchStats,
   fetchPokemonTypes,
+  fetchPokemonByType,
   fetchSpecies,
   fetchAbilities,
 };
